@@ -121,7 +121,7 @@ workflows:
           requires:
             - deploy-to-aws-s3
           filters:
-            branchs:
+            branches:
               only:
                 - develop
                 - staging 
