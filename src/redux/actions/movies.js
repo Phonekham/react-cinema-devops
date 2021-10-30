@@ -10,7 +10,7 @@ import { MOVIE_API_URL } from "../../services/movies.service";
 export const getMovies = (type, pageNumber) => async (dispatch) => {
   try {
     const response = await MOVIE_API_URL(type, pageNumber);
-    const { results, payload } = response;
+    const { results, payload } = response.data;
     dispatchMethod(MOVIE_LIST, results, dispatch);
     dispatchMethod(RESPONSE_PAGE, payload, dispatch);
   } catch (error) {
