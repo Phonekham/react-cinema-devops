@@ -25,7 +25,6 @@ const MainContent = (props) => {
     }
   };
 
-  console.log(list);
   useEffect(() => {
     if (randomMovies.length) {
       const IMAGES = [

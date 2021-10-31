@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-import './SlideShow.scss';
+import "./SlideShow.scss";
 
 const Slideshow = (props) => {
   const { images, auto, showArrows } = props;
@@ -16,6 +16,11 @@ const Slideshow = (props) => {
   let currentSlideIndex = 0;
 
   useEffect(() => {
+    setState({
+      ...state,
+      slideIndex: 0,
+      slideShow: images[0],
+    });
     if (auto) {
       const timeInterval = setInterval(() => {
         autoMoveSlide();
@@ -29,7 +34,7 @@ const Slideshow = (props) => {
     }
 
     // eslint-disable-next-line
-  }, []);
+  }, [images]);
 
   const autoMoveSlide = () => {
     let lastIndex = 0;
@@ -44,7 +49,7 @@ const Slideshow = (props) => {
 
   const moveSlideWithArrows = (type) => {
     let index = currentIndex;
-    if (type === 'prev') {
+    if (type === "prev") {
       if (currentIndex <= 0) {
         index = images.length - 1;
       } else {
@@ -71,11 +76,11 @@ const Slideshow = (props) => {
       <div className="slider-arrows">
         <div
           className="slider-arrow slider-arrow--left"
-          onClick={() => moveSlideWithArrows('prev')}
+          onClick={() => moveSlideWithArrows("prev")}
         />
         <div
           className="slider-arrow slider-arrow--right"
-          onClick={() => moveSlideWithArrows('next')}
+          onClick={() => moveSlideWithArrows("next")}
         />
       </div>
     );
@@ -86,8 +91,8 @@ const Slideshow = (props) => {
     const listIndicators = images.map((slide, i) => {
       const btnClasses =
         i === currentSlide
-          ? 'slider-navButton slider-navButton--active'
-          : 'slider-navButton';
+          ? "slider-navButton slider-navButton--active"
+          : "slider-navButton";
       return <button className={btnClasses} key={i} />;
     });
     return <div className="slider-nav">{listIndicators}</div>;
