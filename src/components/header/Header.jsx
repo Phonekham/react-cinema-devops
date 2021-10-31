@@ -91,7 +91,11 @@ const Header = (props) => {
             {HEADER_LIST.map((data) => (
               <li
                 key={data.id}
-                className="header-nav-item"
+                className={
+                  data.type === type
+                    ? "header-nav-item active-item"
+                    : "header-nav-item"
+                }
                 onClick={() => setMovieTypeUrl(data.type, data.name)}
               >
                 <span className="header-list-name">
