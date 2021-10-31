@@ -7,11 +7,22 @@ import Slideshow from "../slide-show/SlideShow";
 import Paginate from "../paginate/Paginate";
 import Grid from "../grid/Grid";
 import { IMAGE_URL } from "../../../services/movies.service";
+import {
+  getMovies,
+  setResponsePageNumber,
+} from "../../../redux/actions/movies";
 
 const MainContent = (props) => {
-  const { list, movieType, page, totalPages } = props;
+  const {
+    list,
+    movieType,
+    page,
+    totalPages,
+    getMovies,
+    setResponsePageNumber,
+  } = props;
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(page);
   const [images, setImages] = useState([]);
   const randomMovies = list
     .sort(() => Math.random() - Math.random())
@@ -25,12 +36,21 @@ const MainContent = (props) => {
   };
 
   const paginate = (type) => {
+    let pageNumber = currentPage;
     if (type === "prev" && currentPage >= 1) {
-      setCurrentPage((prev) => prev - 1);
+      pageNumber -= 1;
     } else {
-      setCurrentPage((prev) => prev + 1);
+      pageNumber += 1;
     }
+    setCurrentPage(pageNumber);
+    setResponsePageNumber(pageNumber, totalPages);
+    getMovies(movieType, pageNumber);
   };
+
+  useEffect(() => {
+    setCurrentPage(page);
+    // eslint-disable-next-line
+  }, [page, totalPages]);
 
   useEffect(() => {
     if (randomMovies.length) {
@@ -91,4 +111,6 @@ const mapStateToProps = (state) => ({
   page: state.movies.page,
 });
 
-export default connect(mapStateToProps, {})(MainContent);
+export default connect(mapStateToProps, { getMovies, setResponsePageNumber })(
+  MainContent
+);
