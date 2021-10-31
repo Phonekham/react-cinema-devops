@@ -1,10 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import MainContent from "../content/main-content/MainContent";
 import Spinner from "../spinner/Spinner";
+import {
+  loadMoreMovies,
+  setResponsePageNumber,
+} from "../../redux/actions/movies";
+import "./main.scss";
 
-const Main = () => {
+const Main = (props) => {
+  const { loadMoreMovies, page, totalPages, setResponsePageNumber, movieType } =
+    props;
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(page);
+  const mainRef = useRef();
+  const bottomLineRef = useRef();
 
   useEffect(() => {
     setLoading(true);
@@ -13,7 +25,57 @@ const Main = () => {
     }, 3000);
   }, []);
 
-  return <div className="main">{loading ? <Spinner /> : <MainContent />}</div>;
+  useEffect(() => {
+    setResponsePageNumber(currentPage, totalPages);
+    // eslint-disable-next-line
+  }, [currentPage, totalPages]);
+
+  const fetchData = () => {
+    let pageNumber = currentPage;
+    if (page < totalPages) {
+      pageNumber += 1;
+      setCurrentPage(pageNumber);
+      loadMoreMovies(movieType, pageNumber);
+    }
+  };
+
+  const handleScroll = () => {
+    console.log("scr");
+    const containerHeight = mainRef.current.getBoundingClientRect().height;
+    const { top: bottomLineTop } =
+      bottomLineRef.current.getBoundingClientRect();
+    if (bottomLineTop <= containerHeight) {
+      // fetch data
+      fetchData();
+    }
+    console.log(containerHeight);
+  };
+
+  return (
+    <div className="main" ref={mainRef} onScroll={handleScroll}>
+      {loading ? <Spinner /> : <MainContent />}
+      <div ref={bottomLineRef}></div>
+    </div>
+  );
 };
 
-export default Main;
+Main.propTypes = {
+  list: PropTypes.array,
+  page: PropTypes.number,
+  totalPages: PropTypes.number,
+  loadMoreMovies: PropTypes.func,
+  setResponsePageNumber: PropTypes.func,
+  movieType: PropTypes.string,
+};
+
+const mapStateToProps = (state) => ({
+  list: state.movies.list,
+  page: state.movies.page,
+  totalPages: state.movies.totalPages,
+  movieType: state.movies.movieType,
+});
+
+export default connect(mapStateToProps, {
+  loadMoreMovies,
+  setResponsePageNumber,
+})(Main);
