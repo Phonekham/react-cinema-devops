@@ -26,6 +26,7 @@ export default (state = initialState, action) => {
         totalPages: action.payload.totalPages,
       };
     case LOAD_MORE_RESULTS:
+      console.log(action);
       return {
         ...state,
         list: [...state.list, ...action.payload.list],
