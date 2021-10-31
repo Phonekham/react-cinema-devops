@@ -43,9 +43,9 @@ const Header = (props) => {
   let [menuClass, setMenuClass] = useState(false);
   const [type, setType] = useState("now_playing");
 
-  const setMovieTypeUrl = (type, name) => {
+  const setMovieTypeUrl = (type) => {
     setType(type);
-    setMovieType(name);
+    setMovieType(type);
   };
 
   const toggleMenu = () => {
@@ -96,7 +96,7 @@ const Header = (props) => {
                     ? "header-nav-item active-item"
                     : "header-nav-item"
                 }
-                onClick={() => setMovieTypeUrl(data.type, data.name)}
+                onClick={() => setMovieTypeUrl(data.type)}
               >
                 <span className="header-list-name">
                   <i className={data.iconClass}></i>

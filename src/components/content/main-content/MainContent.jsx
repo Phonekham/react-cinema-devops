@@ -9,13 +9,20 @@ import Grid from "../grid/Grid";
 import { IMAGE_URL } from "../../../services/movies.service";
 
 const MainContent = (props) => {
-  const { list, movieType } = props;
+  const { list, movieType, page, totalPages } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [images, setImages] = useState([]);
   const randomMovies = list
     .sort(() => Math.random() - Math.random())
     .slice(0, 4);
+
+  const HEADER_TYPE = {
+    now_playing: "Now Playing",
+    popular: "Popular",
+    top_rated: "Top Rated",
+    upcoming: "Upcoming",
+  };
 
   const paginate = (type) => {
     if (type === "prev" && currentPage >= 1) {
@@ -54,11 +61,11 @@ const MainContent = (props) => {
     <div className="main-content">
       <Slideshow images={images} auto={true} showArrows={true} />
       <div className="grid-movie-title">
-        <div className="movieType">{movieType}</div>
+        <div className="movieType">{HEADER_TYPE[movieType]}</div>
         <div className="paginate">
           <Paginate
             currentPage={currentPage}
-            totalPages={10}
+            totalPages={totalPages}
             paginate={paginate}
           />
         </div>
@@ -68,18 +75,20 @@ const MainContent = (props) => {
   );
 };
 
-// MainContent.propTypes = {
-//   list: PropTypes.array.isRequired,
-//   movieType: PropTypes.string.isRequired,
-//   totalPages: PropTypes.number.isRequired,
-//   page: PropTypes.number.isRequired,
-//   getMovies: PropTypes.func.isRequired,
-//   setResponsePageNumber: PropTypes.func.isRequired,
-// };
+MainContent.propTypes = {
+  list: PropTypes.array.isRequired,
+  movieType: PropTypes.string.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  // getMovies: PropTypes.func.isRequired,
+  // setResponsePageNumber: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => ({
   list: state.movies.list,
   movieType: state.movies.movieType,
+  totalPages: state.movies.totalPages,
+  page: state.movies.page,
 });
 
 export default connect(mapStateToProps, {})(MainContent);
