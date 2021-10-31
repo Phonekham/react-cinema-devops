@@ -40,7 +40,6 @@ const Main = (props) => {
   };
 
   const handleScroll = () => {
-    console.log("scr");
     const containerHeight = mainRef.current.getBoundingClientRect().height;
     const { top: bottomLineTop } =
       bottomLineRef.current.getBoundingClientRect();
@@ -48,7 +47,6 @@ const Main = (props) => {
       // fetch data
       fetchData();
     }
-    console.log(containerHeight);
   };
 
   return (
