@@ -20,10 +20,6 @@ export const getMovies = (type, pageNumber) => async (dispatch) => {
   }
 };
 
-const dispatchMethod = (type, payload, dispatch) => {
-  dispatch({ type, payload });
-};
-
 export const loadMoreMovies = (type, pageNumber) => async (dispatch) => {
   try {
     const response = await getMoviesRequest(type, pageNumber);
@@ -45,6 +41,14 @@ export const loadMoreMovies = (type, pageNumber) => async (dispatch) => {
 export const setResponsePageNumber = (page, totalPages) => async (dispatch) => {
   const payload = { page, totalPages };
   dispatchMethod(RESPONSE_PAGE, payload, dispatch);
+};
+
+export const setMovieType = (type) => async (dispatch) => {
+  dispatchMethod(MOVIE_TYPE, type, dispatch);
+};
+
+const dispatchMethod = (type, payload, dispatch) => {
+  dispatch({ type, payload });
 };
 
 const getMoviesRequest = async (type, pageNumber) => {

@@ -4,7 +4,11 @@ import PropTypes from "prop-types";
 
 import logo from "../../logo.svg";
 import "./Header.scss";
-import { getMovies } from "../../redux/actions/movies";
+import {
+  getMovies,
+  setMovieType,
+  setResponsePageNumber,
+} from "../../redux/actions/movies";
 
 const HEADER_LIST = [
   {
@@ -34,9 +38,15 @@ const HEADER_LIST = [
 ];
 
 const Header = (props) => {
-  const { getMovies } = props;
+  const { getMovies, setMovieType, page, totalPages } = props;
   let [navClass, setNavClass] = useState(false);
   let [menuClass, setMenuClass] = useState(false);
+  const [type, setType] = useState("now_playing");
+
+  const setMovieTypeUrl = (type, name) => {
+    setType(type);
+    setMovieType(name);
+  };
 
   const toggleMenu = () => {
     menuClass = !menuClass;
@@ -51,8 +61,8 @@ const Header = (props) => {
   };
 
   useEffect(() => {
-    getMovies("now_playing", 1);
-  }, []);
+    getMovies(type, page);
+  }, [type]);
 
   return (
     <>
@@ -79,7 +89,11 @@ const Header = (props) => {
             }`}
           >
             {HEADER_LIST.map((data) => (
-              <li key={data.id} className="header-nav-item">
+              <li
+                key={data.id}
+                className="header-nav-item"
+                onClick={() => setMovieTypeUrl(data.type, data.name)}
+              >
                 <span className="header-list-name">
                   <i className={data.iconClass}></i>
                 </span>
@@ -112,8 +126,12 @@ Header.propTypes = {
 
 const mapStateToProps = (state) => ({
   list: state.movies.list,
-  // page: state.movies.page,
-  // totalPages: state.movies.totalPages,
+  page: state.movies.page,
+  totalPages: state.movies.totalPages,
 });
 
-export default connect(mapStateToProps, { getMovies })(Header);
+export default connect(mapStateToProps, {
+  getMovies,
+  setMovieType,
+  setResponsePageNumber,
+})(Header);

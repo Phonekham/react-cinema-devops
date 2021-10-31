@@ -9,7 +9,7 @@ import Grid from "../grid/Grid";
 import { IMAGE_URL } from "../../../services/movies.service";
 
 const MainContent = (props) => {
-  const { list } = props;
+  const { list, movieType } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [images, setImages] = useState([]);
@@ -54,7 +54,7 @@ const MainContent = (props) => {
     <div className="main-content">
       <Slideshow images={images} auto={true} showArrows={true} />
       <div className="grid-movie-title">
-        <div className="movieType">Now Playing</div>
+        <div className="movieType">{movieType}</div>
         <div className="paginate">
           <Paginate
             currentPage={currentPage}
@@ -63,7 +63,7 @@ const MainContent = (props) => {
           />
         </div>
       </div>
-      <Grid images={images} />
+      <Grid />
     </div>
   );
 };
@@ -79,6 +79,7 @@ const MainContent = (props) => {
 
 const mapStateToProps = (state) => ({
   list: state.movies.list,
+  movieType: state.movies.movieType,
 });
 
 export default connect(mapStateToProps, {})(MainContent);
