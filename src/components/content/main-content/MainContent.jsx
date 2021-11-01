@@ -75,6 +75,7 @@ const MainContent = (props) => {
       ];
       setImages(IMAGES);
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

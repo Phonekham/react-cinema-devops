@@ -44,14 +44,21 @@ const Header = (props) => {
     getMovies,
     setMovieType,
     page,
-    totalPages,
     searchQuery,
     searchResult,
+    setResponsePageNumber,
+    totalPages,
   } = props;
   let [navClass, setNavClass] = useState(false);
   let [menuClass, setMenuClass] = useState(false);
   const [type, setType] = useState("now_playing");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    getMovies(type, page);
+    setResponsePageNumber(page, totalPages);
+    // eslint-disable-next-line
+  }, [type]);
 
   const setMovieTypeUrl = (type) => {
     setType(type);
@@ -75,10 +82,6 @@ const Header = (props) => {
     searchQuery(e.target.value);
     searchResult(e.target.value);
   };
-
-  useEffect(() => {
-    getMovies(type, page);
-  }, [type]);
 
   return (
     <>
