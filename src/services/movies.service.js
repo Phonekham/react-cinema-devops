@@ -12,7 +12,7 @@ export const MOVIE_API_URL = async (type, page) => {
 
 export const SEARCH_API_URL = async (query) => {
   const response = await axios.get(
-    `${REQUEST_URL}/movie?api_key=${API_KEY}&language=en-US&query=${query}`
+    `${REQUEST_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${query}`
   );
   return response;
 };
