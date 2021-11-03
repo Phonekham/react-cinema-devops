@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import logo from "../../logo.svg";
@@ -11,6 +11,7 @@ import {
   setResponsePageNumber,
   searchQuery,
   searchResult,
+  clearMovieDetails,
 } from "../../redux/actions/movies";
 
 const HEADER_LIST = [
@@ -54,18 +55,33 @@ const Header = (props) => {
   let [menuClass, setMenuClass] = useState(false);
   const [type, setType] = useState("now_playing");
   const [search, setSearch] = useState("");
+  const [disableSearch, setDisableSearch] = useState(false);
 
   const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     getMovies(type, page);
     setResponsePageNumber(page, totalPages);
+
+    if (location.pathname !== "/" && location.key) {
+      setDisableSearch(true);
+    }
+
     // eslint-disable-next-line
-  }, [type]);
+  }, [type, disableSearch, location]);
 
   const setMovieTypeUrl = (type) => {
-    setType(type);
-    setMovieType(type);
+    setDisableSearch(false);
+    if (location.pathname !== "/") {
+      clearMovieDetails();
+      history.push("/");
+      setType(type);
+      setMovieType(type);
+    } else {
+      setType(type);
+      setMovieType(type);
+    }
   };
 
   const toggleMenu = () => {
@@ -88,6 +104,7 @@ const Header = (props) => {
 
   const navigateToHome = () => {
     history.push("/");
+    setDisableSearch(false);
   };
 
   return (
@@ -132,7 +149,7 @@ const Header = (props) => {
               </li>
             ))}
             <input
-              className="search-input"
+              className={`search-input ${disableSearch ? "disabled" : ""}`}
               type="text"
               placeholder="Search for a movie"
               value={search}
@@ -168,4 +185,5 @@ export default connect(mapStateToProps, {
   setResponsePageNumber,
   searchQuery,
   searchResult,
+  clearMovieDetails,
 })(Header);

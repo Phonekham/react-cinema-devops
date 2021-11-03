@@ -5,6 +5,8 @@ import {
   MOVIE_TYPE,
   SEARCH_QUERY,
   SEARCH_RESULT,
+  MOVIE_DETAILS,
+  CLEAR_MOVIE_DETAILS,
 } from "../types";
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   movieType: "now_playing",
   searchQuery: "",
   searchResult: [],
+  movie: [],
 };
 
 export default (state = initialState, action) => {
@@ -51,6 +54,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         searchResult: action.payload,
+      };
+    case MOVIE_DETAILS:
+      return {
+        ...state,
+        movie: action.payload,
+      };
+    case CLEAR_MOVIE_DETAILS:
+      return {
+        ...state,
+        movie: [],
       };
     default:
       return state;
