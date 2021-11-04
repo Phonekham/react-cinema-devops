@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./App.scss";
 import Details from "./components/content/details/Details";
+import ErrorPage from "./components/error/ErrorPage";
 import Header from "./components/header/Header";
 import Main from "./components/main/Main";
 
@@ -18,6 +19,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Main} />
             <Route exact path="/:id/:name/details" component={Details} />
+            <Route path="*" component={ErrorPage} />
           </Switch>
         </div>
       </Router>
