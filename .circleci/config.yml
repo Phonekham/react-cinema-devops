@@ -21,6 +21,16 @@ jobs:
             - node_modules
           key: app-{{checksum "package.json"}}
 
+  unit-test:
+    executor: app-executor
+    steps:
+      - checkout
+      - *show-current-branch-name
+      - *restore-cache
+      - run:
+          name: Run unit unit
+          command: npm run test
+
   deploy-to-aws-s3:
     docker:
       - image: circleci/node:13.12.0
@@ -100,9 +110,19 @@ workflows:
   build_and_deploy:
     jobs:
       - build
+      - unit-test:
+          requires:
+            - linting
+            - prettier
+          filters:
+            branches:
+              only:
+                - develop
+                - master 
+                - staging
       - deploy-to-aws-s3:
           requires:
-            - build
+            - unit-test
           filters:
             branches:
               only:
